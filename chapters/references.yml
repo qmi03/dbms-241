@@ -1,0 +1,39 @@
+postgres-doc:
+  type: Web
+  title: PostgreSQL 17.2 documentation
+  author: PostgreSQL org
+  url: https://www.postgresql.org/docs/17/index.html
+
+interdb:
+  type: Web
+  title: The internals of PostgreSQL
+  author: Hironobu Suzuki
+  url: https://www.interdb.jp/pg/
+
+hbase-apache-acid:
+  type: Web
+  title: ACID semantics
+  author: Apache HBase project
+  url: https://hbase.apache.org/acid-semantics.html
+
+hbase-blogspot:
+  type: Web
+  title: ACID in HBase
+  author: Lars Hofhansl
+  url: http://hadoop-hbase.blogspot.com/2012/03/acid-in-hbase.html
+
+hbase-doc:
+  type: Web
+  title: Apache Hbase reference guide
+  author: Apache HBase
+  url: https://hbase.apache.org/book.html
+
+hbase-gitbook:
+  type: Web
+  title: HBase Gitbook
+  url: https://nag-9-s.gitbook.io/hbase
+
+transaction-manifesto:
+  type: Web
+  title: Transaction manifesto
+  url: https://apple.github.io/foundationdb/transaction-manifesto.html
