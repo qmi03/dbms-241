@@ -78,7 +78,51 @@ levels of abstraction.
       - Main fork: Actual data
       - Free Space Map (FSM) fork: Tracks available space
       - Visibility Map (VM) fork: Tracks page tuple status
+==== Heap Table File
 
+In PostgreSQL, data files (including heap tables, indexes, free space maps, and
+visibility maps) are organized into fixed-length pages, typically 8192 bytes (8
+KB) in size. These pages are sequentially numbered, with block numbers starting
+from 0. When a file becomes full, PostgreSQL appends a new empty page to
+increase its size.
+
++ *Page Structure*
+
+  - A page in a PostgreSQL heap table contains three primary components:
+    - Heap Tuples
+      - Heap tuples represent the actual record data. They are stacked from the bottom
+        of the page. The internal structure of tuples is complex and involves
+        considerations of concurrency control and write-ahead logging.
+  - Line Pointers
+    - 4 bytes long
+    - Also called item pointers
+    - Form an array acting as an index to tuples
+    - Sequentially numbered from 1 (offset number)
+    - A new line pointer is added when a tuple is inserted
+  - Page Header (PageHeaderData)
+    - The page header is 24 bytes long and contains crucial metadata:
+      - *pd_lsn*: 8-byte unsigned integer storing the Log Sequence Number (LSN) of the
+        last page modification
+      - *pd_checksum*: Page checksum value (supported in versions 9.3 and later)
+      - *pd_lower*: Points to the end of line pointers
+      - *pd_upper*: Points to the beginning of the newest heap tuple
+      - *pd_special*: In table pages, points to the page's end
+      - The space between line pointers and the newest tuple is called *free space* or a
+        *hole*.
+  - Tuple Identification
+    - Tuples are identified internally using a Tuple Identifier (TID), which consists
+      of:
+      - Block number of the page containing the tuple
+      - Offset number of the line pointer pointing to the tuple
+
+=== TOAST Mechanism
+
+For tuples larger than approximately 2 KB (about 1/4 of a page), PostgreSQL uses
+TOAST (The Oversized-Attribute Storage Technique) to manage and store the data
+efficiently.
+
+*Note*: This page structure is classified as a *slotted page* in computer
+science, with line pointers corresponding to a *slot array*.
 + *Special Storage Mechanisms*
   - TOAST (The Oversized-Attribute Storage Technique)
     - Handles large column values
